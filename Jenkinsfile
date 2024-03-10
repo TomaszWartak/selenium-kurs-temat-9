@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+            maven "Maven" // nazwa zdefiniowana w konfiguracji Jenkins
+    }
     stages {
         stage('Build test code') {
             steps {
