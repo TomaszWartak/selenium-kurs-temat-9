@@ -11,13 +11,13 @@ pipeline {
         }
         stage('Run selenium grid') {
             steps {
-                sh 'docker-compose up -d' // Uruchiomienie Docker Selenium
+                sh 'docker compose up -d' // Uruchiomienie Docker Selenium
             }
         }
         stage('Execute test') {
             steps {
                 sh 'mvn test' // Uruchomienie testów
-                sh 'docker-compose down' // Wyłączenie Docker Selenium, wyłączenie kontenerów
+                sh 'docker compose down' // Wyłączenie Docker Selenium, wyłączenie kontenerów
             }
         }
     }
