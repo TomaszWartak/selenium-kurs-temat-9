@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
             maven "Maven" // nazwa zdefiniowana w konfiguracji Jenkins
-            docker "org.jenkinsci.plugins.docker.commons.tools.DockerTool"
+            docker "dockerTool"
     }
     stages {
         stage('Build test code') {
