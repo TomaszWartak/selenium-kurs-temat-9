@@ -2,7 +2,8 @@ pipeline {
     agent any
     tools {
             maven "Maven" // nazwa zdefiniowana w konfiguracji Jenkins
-            //docker "Docker"
+            docker "Docker"
+            'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker'
     }
     stages {
         stage('Build test code') {
@@ -12,7 +13,7 @@ pipeline {
         }
         stage('Run selenium grid') {
             steps {
-                sh 'docker compose up -d' // Uruchiomienie Docker Selenium
+                sh 'docker compose up -d' // Uruchomienie Docker Selenium
             }
         }
         stage('Execute test') {
