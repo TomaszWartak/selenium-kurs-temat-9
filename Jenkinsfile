@@ -13,7 +13,6 @@ pipeline {
         }
         stage('Run selenium grid') {
             steps {
-                sh 'docker ps'
                 sh 'docker compose up -d' // Uruchomienie Docker Selenium
             }
         }
