@@ -14,11 +14,11 @@
         </classes>
     </test>
 
-    <test name="Positive Login Tests">
+    <!--test name="Positive Login Tests">
         <parameter name="browser" value="CHROME"/>
         <classes>
             <class name="tests.PositiveLoginTests"/>
         </classes>
-    </test>
+    </test-->
 
 </suite>

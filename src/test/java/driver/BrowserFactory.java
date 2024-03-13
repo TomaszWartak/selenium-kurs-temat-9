@@ -20,7 +20,7 @@ public class BrowserFactory {
     private static final String MESSAGE_UNKNOWN_BROWSER = "Unknown browser type! Please check your configuration";
 
     //Pole określające typ przeglądarki
-    private BrowserType browserType;
+    private driver.BrowserType browserType;
 
     //Pole określające czy uruchomienie jest zdalne czy lokalne
     private boolean isRemoteRun;
