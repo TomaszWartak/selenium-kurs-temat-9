@@ -99,7 +99,7 @@ class Container {
         }
     }
 
-    run() {
+    def run() {
         if (isContainerRunning( name, getRunningContainersNames() )) {
             echo "Container '${name}' is already running."
         } else {
