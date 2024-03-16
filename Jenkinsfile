@@ -194,7 +194,10 @@ pipeline {
         stage('Running containers') {
             steps {
                 script {
+                    echo "DockerUtlis - przed"
                     def dockerUtils = new DockerUtils( currentBuild )
+                    echo "DockerUtlis - po"
+                    echo "hubContainer - przed"
                     def hubContainer = new ContainerBuilder()
                         .withName( HUB_CONTAINER_NAME )
                         .withImageName( HUB_IMAGE_NAME )
