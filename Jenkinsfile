@@ -45,7 +45,7 @@ class DockerUtils {
     }
 
     def echo( message ) {
-        currentBuild.echo( message )
+        println( message )
     }
 
     def getRunningContainersNames() {
