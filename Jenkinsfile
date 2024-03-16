@@ -146,9 +146,9 @@ class Container {
         } else {
             echo "Container '${name}' is not running, then run it"
             if (dockerUtils.isContainerExisting( name, dockerUtils.getExistingContainersNames() )) {
-                sh(script: "docker start ${name}")
+                this.sh(script: "docker start ${name}")
             } else {
-                sh(script: "docker run -d --name ${name} ${imageName}")
+                this.sh(script: "docker run -d --name ${name} ${imageName}")
             }
         }
     }
