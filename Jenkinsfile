@@ -37,6 +37,12 @@ def runContainer( containerName, imageName ) {
 
 class DockerUtils {
 
+    def currentBuild
+
+    DockerUtils( currentBuild ) {
+        this.currentBuild = currentBuild
+    }
+
     def getRunningContainersNames() {
         def dockerPsOutput = currentBuild.sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
         echo "getRunningContainersNames: "+ dockerPsOutput
