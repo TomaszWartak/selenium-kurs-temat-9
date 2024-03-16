@@ -41,7 +41,7 @@ class DockerUtils {
 
     DockerUtils( currentBuild ) {
         this.currentBuild = currentBuild
-        echo( "konstruktor DockerUtils" )
+//         echo( "konstruktor DockerUtils" )
     }
 
     def echo( message ) {
