@@ -35,6 +35,95 @@ def runContainer( containerName, imageName ) {
     } 
 }
 
+class ContainerBuilder {
+    String name
+    String imageName
+    String dependsOn
+    String sharedMemorySize
+    List<String> environmentParameters = []
+    List<String> ports = []
+
+    ContainerBuilder withName(String name) {
+        this.name = name
+        return this
+    }
+
+    ContainerBuilder withImageName(String imageName) {
+        this.imageName = imageName
+        return this
+    }
+
+    ContainerBuilder withDependsOn(String dependsOn) {
+        this.dependsOn = dependsOn
+        return this
+    }
+
+    ContainerBuilder withSharedMemorySize(String sharedMemorySize) {
+        this.sharedMemorySize = sharedMemorySize
+        return this
+    }
+
+    ContainerBuilder withEnvironmentParameter(String parameter) {
+        this.environmentParameters << parameter
+        return this
+    }
+
+    ContainerBuilder withPort(String port) {
+        this.ports << port
+        return this
+    }
+
+    Container build() {
+        return new Container(
+            name: name,
+            imageName: imageName,
+            dependsOn: dependsOn,
+            sharedMemorySize: sharedMemorySize,
+            environmentParameters: environmentParameters as String[],
+            ports: ports as String[]
+        )
+    }
+}
+
+class Container {
+    String name
+    String imageName
+    String dependsOn
+    String sharedMemorySize
+    String[] environmentParameters
+    String[] ports
+
+    Container(Map params) {
+        params.each { key, value ->
+            this."$key" = value
+        }
+    }
+
+    run() {
+        if (isContainerRunning( name, getRunningContainersNames() )) {
+            echo "Container '${name}' is already running."
+        } else {
+            echo "Container '${name}' is not running, then run it"
+            if (isContainerExisting( name, getExistingContainersNames() )) {
+                sh(script: "docker start ${name}")
+            } else {
+                sh(script: "docker run -d --name ${name} ${imageName}")
+            }
+        }
+    }
+}
+/*
+        --shm-size=2gb \
+        --depends-on selenium-hub \
+        -e SE_EVENT_BUS_HOST=selenium-hub \
+        -e SE_EVENT_BUS_PUBLISH_PORT=4442 \
+        -e SE_EVENT_BUS_SUBSCRIBE_PORT=4443 \
+        -p 4442:4442 \
+        -p 4443:4443 \
+        -p 4444:4444 \
+ */
+
+
 pipeline {
     agent any
 
@@ -50,7 +139,12 @@ pipeline {
         stage('Running containers') {
             steps {
                 script {
-                    runContainer( HUB_CONTAINER_NAME, HUB_IMAGE_NAME )
+                    def hubContainer = new ContainerBuilder()
+                        .withName( HUB_CONTAINER_NAME )
+                        .withImageName( HUB_IMAGE_NAME )
+                        .build()
+                    hubContainer.run()
+                    //runContainer( HUB_CONTAINER_NAME, HUB_IMAGE_NAME )
                     runContainer( CHROME_CONTAINER_NAME, CHROME_IMAGE_NAME )
                 }
             }
