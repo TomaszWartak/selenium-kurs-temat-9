@@ -44,7 +44,8 @@ class DockerUtils {
     }
 
     def getRunningContainersNames() {
-        def dockerPsOutput = currentBuild.sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
+        //def dockerPsOutput = currentBuild.sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
+        def dockerPsOutput = runScript( 'docker ps --format "{{.Names}}"', true).trim()
         echo "getRunningContainersNames: "+ dockerPsOutput
         return dockerPsOutput
     }
@@ -56,7 +57,8 @@ class DockerUtils {
     def getExistingContainersNames() {
         def dockerPsOutput
         try {
-            dockerPsOutput = currentBuild.sh(script: 'docker ps -a --format "{{.Names}}"', returnStdout: true )
+            // dockerPsOutput = currentBuild.sh(script: 'docker ps -a --format "{{.Names}}"', returnStdout: true )
+            dockerPsOutput = runScript('docker ps -a --format "{{.Names}}"', true )
         } catch (Exception ex) {
             dockerPsOutput = ""
         }
@@ -73,13 +75,16 @@ class DockerUtils {
         } else {
             echo "Container '${containerName}' is not running, then run it"
             if (isContainerExisting( containerName, getExistingContainersNames() )) {
-                currentBuild.sh(script: "docker start ${containerName}")
+                runScript( "docker start ${containerName}", false )
             } else {
-                currentBuild.sh(script: "docker run -d --name ${containerName} ${imageName}")
+                runScript( "docker run -d --name ${containerName} ${imageName}", false )
             }
         }
     }
 
+    def runScript( script, returnStdout ) {
+        currentBuild.sh( script: script, returnStdout: returnStdout )
+    }
 }
 
 class ContainerBuilder {
@@ -152,9 +157,11 @@ class Container {
         } else {
             echo "Container '${name}' is not running, then run it"
             if (dockerUtils.isContainerExisting( name, dockerUtils.getExistingContainersNames() )) {
-                this.sh(script: "docker start ${name}")
+                //this.sh(script: "docker start ${name}")
+                dockerUtils.runScript( "docker start ${name}", false )
             } else {
-                this.sh(script: "docker run -d --name ${name} ${imageName}")
+                // this.sh(script: "docker run -d --name ${name} ${imageName}")
+                dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
             }
         }
     }
