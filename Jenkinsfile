@@ -44,10 +44,14 @@ class DockerUtils {
         currentBuild.println( "konstruktor DockerUtils" )
     }
 
+    def echo( message ) {
+        currentBuild.echo( message )
+    }
+
     def getRunningContainersNames() {
         //def dockerPsOutput = currentBuild.sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
         def dockerPsOutput = runScript( 'docker ps --format "{{.Names}}"', true).trim()
-        currentBuild.echo "getRunningContainersNames: "+ dockerPsOutput
+        echo ( "getRunningContainersNames: "+ dockerPsOutput )
         return dockerPsOutput
     }
 
@@ -72,9 +76,9 @@ class DockerUtils {
 
     def runContainer( containerName, imageName ) {
         if (isContainerRunning( containerName, getRunningContainersNames() )) {
-            currentBuild.echo "Container '${containerName}' is already running."
+            echo( "Container '${containerName}' is already running." )
         } else {
-            currentBuild.echo "Container '${containerName}' is not running, then run it"
+            echo( "Container '${containerName}' is not running, then run it" )
             if (isContainerExisting( containerName, getExistingContainersNames() )) {
                 runScript( "docker start ${containerName}", false )
             } else {
@@ -84,7 +88,7 @@ class DockerUtils {
     }
 
     def runScript( script, returnStdout ) {
-        currentBuild.echo( script )
+        echo( script )
         currentBuild.sh( script: script, returnStdout: returnStdout )
     }
 }
