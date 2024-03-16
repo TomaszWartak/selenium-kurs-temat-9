@@ -35,6 +35,47 @@ def runContainer( containerName, imageName ) {
     } 
 }
 
+class DockerUtils {
+
+    def getRunningContainersNames() {
+        def dockerPsOutput = sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
+        echo "getRunningContainersNames: "+ dockerPsOutput
+        return dockerPsOutput
+    }
+
+    def isContainerRunning( containerName, runningContainersNames ) {
+        return runningContainersNames.split().contains( containerName )
+    }
+
+    def getExistingContainersNames() {
+        def dockerPsOutput
+        try {
+            dockerPsOutput = sh(script: 'docker ps -a --format "{{.Names}}"', returnStdout: true )
+        } catch (Exception ex) {
+            dockerPsOutput = ""
+        }
+        return dockerPsOutput
+    }
+
+    def isContainerExisting( containerName, existingContainersNames ) {
+        return existingContainersNames.split().contains( containerName )
+    }
+
+    def runContainer( containerName, imageName ) {
+        if (isContainerRunning( containerName, getRunningContainersNames() )) {
+            echo "Container '${containerName}' is already running."
+        } else {
+            echo "Container '${containerName}' is not running, then run it"
+            if (isContainerExisting( containerName, getExistingContainersNames() )) {
+                sh(script: "docker start ${containerName}")
+            } else {
+                sh(script: "docker run -d --name ${containerName} ${imageName}")
+            }
+        }
+    }
+
+}
+
 class ContainerBuilder {
     String name
     String imageName
@@ -99,12 +140,12 @@ class Container {
         }
     }
 
-    def run() {
-        if (isContainerRunning( name, getRunningContainersNames() )) {
+    def run( dockerUtils ) {
+        if (dockerUtils.isContainerRunning( name, dockerUtils.getRunningContainersNames() )) {
             echo "Container '${name}' is already running."
         } else {
             echo "Container '${name}' is not running, then run it"
-            if (isContainerExisting( name, getExistingContainersNames() )) {
+            if (dockerUtils.isContainerExisting( name, dockerUtils.getExistingContainersNames() )) {
                 sh(script: "docker start ${name}")
             } else {
                 sh(script: "docker run -d --name ${name} ${imageName}")
@@ -139,11 +180,12 @@ pipeline {
         stage('Running containers') {
             steps {
                 script {
+                    def dockerUtils = new DockerUtils()
                     def hubContainer = new ContainerBuilder()
                         .withName( HUB_CONTAINER_NAME )
                         .withImageName( HUB_IMAGE_NAME )
                         .build()
-                    hubContainer.run()
+                    hubContainer.run( dockerUtils )
                     //runContainer( HUB_CONTAINER_NAME, HUB_IMAGE_NAME )
                     runContainer( CHROME_CONTAINER_NAME, CHROME_IMAGE_NAME )
                 }
