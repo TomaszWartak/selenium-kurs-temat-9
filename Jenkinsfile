@@ -47,7 +47,7 @@ class DockerUtils {
     def getRunningContainersNames() {
         //def dockerPsOutput = currentBuild.sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
         def dockerPsOutput = runScript( 'docker ps --format "{{.Names}}"', true).trim()
-        echo "getRunningContainersNames: "+ dockerPsOutput
+        currentBuild.echo "getRunningContainersNames: "+ dockerPsOutput
         return dockerPsOutput
     }
 
@@ -72,9 +72,9 @@ class DockerUtils {
 
     def runContainer( containerName, imageName ) {
         if (isContainerRunning( containerName, getRunningContainersNames() )) {
-            echo "Container '${containerName}' is already running."
+            currentBuild.echo "Container '${containerName}' is already running."
         } else {
-            echo "Container '${containerName}' is not running, then run it"
+            currentBuild.echo "Container '${containerName}' is not running, then run it"
             if (isContainerExisting( containerName, getExistingContainersNames() )) {
                 runScript( "docker start ${containerName}", false )
             } else {
@@ -196,7 +196,7 @@ pipeline {
             steps {
                 script {
                     echo "DockerUtlis - przed"
-                    def dockerUtils = new DockerUtils( binding /* currentBuild */ )
+                    def dockerUtils = new DockerUtils( /* binding */ currentBuild )
                     echo "DockerUtlis - po"
                     echo "hubContainer - przed"
                     def hubContainer = new ContainerBuilder()
