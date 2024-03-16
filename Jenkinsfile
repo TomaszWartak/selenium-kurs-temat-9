@@ -83,6 +83,7 @@ class DockerUtils {
     }
 
     def runScript( script, returnStdout ) {
+        echo script
         currentBuild.sh( script: script, returnStdout: returnStdout )
     }
 }
