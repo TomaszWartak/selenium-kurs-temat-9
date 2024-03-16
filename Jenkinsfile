@@ -41,6 +41,7 @@ class DockerUtils {
 
     DockerUtils( currentBuild ) {
         this.currentBuild = currentBuild
+        currentBuild.echo( "konstruktor DockerUtils" )
     }
 
     def getRunningContainersNames() {
