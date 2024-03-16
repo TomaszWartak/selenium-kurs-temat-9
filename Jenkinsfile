@@ -196,7 +196,7 @@ pipeline {
             steps {
                 script {
                     echo "DockerUtlis - przed"
-                    def dockerUtils = new DockerUtils( currentBuild )
+                    def dockerUtils = new DockerUtils( binding /* currentBuild */ )
                     echo "DockerUtlis - po"
                     echo "hubContainer - przed"
                     def hubContainer = new ContainerBuilder()
