@@ -186,7 +186,7 @@ pipeline {
         stage('Running containers') {
             steps {
                 script {
-                    def dockerUtils = new DockerUtils()
+                    def dockerUtils = new DockerUtils( currentBuild )
                     def hubContainer = new ContainerBuilder()
                         .withName( HUB_CONTAINER_NAME )
                         .withImageName( HUB_IMAGE_NAME )
