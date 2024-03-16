@@ -37,17 +37,17 @@ def runContainer( containerName, imageName ) {
 
 class DockerUtils {
 
-    static def getRunningContainersNames() {
+    def getRunningContainersNames() {
         def dockerPsOutput = currentBuild.sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
         echo "getRunningContainersNames: "+ dockerPsOutput
         return dockerPsOutput
     }
 
-    static def isContainerRunning( containerName, runningContainersNames ) {
+    def isContainerRunning( containerName, runningContainersNames ) {
         return runningContainersNames.split().contains( containerName )
     }
 
-    static def getExistingContainersNames() {
+    def getExistingContainersNames() {
         def dockerPsOutput
         try {
             dockerPsOutput = currentBuild.sh(script: 'docker ps -a --format "{{.Names}}"', returnStdout: true )
@@ -57,11 +57,11 @@ class DockerUtils {
         return dockerPsOutput
     }
 
-    static def isContainerExisting( containerName, existingContainersNames ) {
+    def isContainerExisting( containerName, existingContainersNames ) {
         return existingContainersNames.split().contains( containerName )
     }
 
-   static def runContainer( containerName, imageName ) {
+    def runContainer( containerName, imageName ) {
         if (isContainerRunning( containerName, getRunningContainersNames() )) {
             echo "Container '${containerName}' is already running."
         } else {
