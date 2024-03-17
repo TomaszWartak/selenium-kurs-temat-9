@@ -220,7 +220,7 @@ pipeline {
                         .withPort( "4443:4443" )
                         .withPort( "4444:4444" )
                         .build()
-                    hubContainer.setJenkinsUtils( JenkinsUtils )
+                    hubContainer.setJenkinsUtils( jenkinsUtils )
                     echo "hubContainer - przed uruchomieniem"
                     hubContainer.run( dockerUtils )
                    /*  echo "chromeContainer - przed uruchomieniem"
