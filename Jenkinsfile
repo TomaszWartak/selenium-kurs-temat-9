@@ -236,6 +236,18 @@ pipeline {
                     echo "DockerUtlis - przed utworzeniem"
                     def dockerUtils = new DockerUtils( jenkinsUtils /* binding */ /* this, binding */ )
 
+                    echo "hubContainer - przed utworzeniem obiektu"
+                    def hubContainer = new ContainerBuilder()
+                        .withName( HUB_CONTAINER_NAME )
+                        .withImageName( HUB_IMAGE_NAME )
+                        .withPort( HUB_PORT_1 )
+                        .withPort( HUB_PORT_2 )
+                        .withPort( HUB_PORT_3 )
+                        .build()
+                    hubContainer.setJenkinsUtils( jenkinsUtils )
+                    echo "hubContainer - przed uruchomieniem"
+                    hubContainer.run( dockerUtils )
+
                     echo "chromeContainer - przed utworzeniem obiektu"
                     def chromeContainer = new ContainerBuilder()
                         .withSharedMemorySize( "2gb" )
@@ -250,17 +262,6 @@ pipeline {
                     chromeContainer.setJenkinsUtils( jenkinsUtils )
                     chromeContainer.run( dockerUtils )
 
-                    echo "hubContainer - przed utworzeniem obiektu"
-                    def hubContainer = new ContainerBuilder()
-                        .withName( HUB_CONTAINER_NAME )
-                        .withImageName( HUB_IMAGE_NAME )
-                        .withPort( HUB_PORT_1 )
-                        .withPort( HUB_PORT_2 )
-                        .withPort( HUB_PORT_3 )
-                        .build()
-                    hubContainer.setJenkinsUtils( jenkinsUtils )
-                    echo "hubContainer - przed uruchomieniem"
-                    hubContainer.run( dockerUtils )
                 }
             }
         }
