@@ -4,7 +4,7 @@ class JenkinsUtils {
 
     JenkinsUtils( script, binding ) {
         this.script = script
-        this.currentBuild = currentBuild
+        this.binding = binding
     }
 
     def showMessage( message ) {
