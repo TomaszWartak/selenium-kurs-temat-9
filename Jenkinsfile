@@ -126,6 +126,7 @@ class Container {
                 // dockerUtils.runScript( "docker start ${name}", false )
                 dockerUtils.runScript( "docker start "+getStartScriptParameters(), false )
             } else {
+                // dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
                 dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
             }
         }
@@ -134,8 +135,8 @@ class Container {
     def getStartScriptParameters() {
         def startScriptParameters = ""
         startScriptParameters =
-            "${name}" // +
-
+            "${name}"+
+            + getPortsScriptText()
         // startScriptParameters = startScriptParameters + getPortsScriptText()
         // startScriptParameters = startScriptParameters + getEnvironmentParametersScriptText
         return startScriptParameters
