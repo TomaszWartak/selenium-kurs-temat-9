@@ -41,17 +41,15 @@ class DockerUtils {
 
     DockerUtils( script ) {
         this.script = script
-//         echo( "konstruktor DockerUtils" )
     }
 
     def echo( message ) {
-        println( message )
+        script.echo( message )
     }
 
     def getRunningContainersNames() {
-        //def dockerPsOutput = script.sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
         def dockerPsOutput = runScript( 'docker ps --format "{{.Names}}"', true).trim()
-        echo ( "getRunningContainersNames: "+ dockerPsOutput )
+        echo( "getRunningContainersNames: "+ dockerPsOutput )
         return dockerPsOutput
     }
 
@@ -62,7 +60,6 @@ class DockerUtils {
     def getExistingContainersNames() {
         def dockerPsOutput
         try {
-            // dockerPsOutput = script.sh(script: 'docker ps -a --format "{{.Names}}"', returnStdout: true )
             dockerPsOutput = runScript('docker ps -a --format "{{.Names}}"', true )
         } catch (Exception ex) {
             dockerPsOutput = ""
@@ -163,10 +160,8 @@ class Container {
         } else {
             dockerUtils.echo( "Container '${name}' is not running, then run it" )
             if (dockerUtils.isContainerExisting( name, dockerUtils.getExistingContainersNames() )) {
-                //this.sh(script: "docker start ${name}")
                 dockerUtils.runScript( "docker start ${name}", false )
             } else {
-                // this.sh(script: "docker run -d --name ${name} ${imageName}")
                 dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
             }
         }
@@ -199,9 +194,8 @@ pipeline {
         stage('Running containers') {
             steps {
                 script {
-                    echo "DockerUtlis - przed"
+                    echo "DockerUtlis - przed utworzeniem"
                     def dockerUtils = new DockerUtils( /* binding */ this )
-                    echo "DockerUtlis - po"
                     echo "hubContainer - przed utworzeniem"
                     def hubContainer = new ContainerBuilder()
                         .withName( HUB_CONTAINER_NAME )
@@ -209,8 +203,13 @@ pipeline {
                         .build()
                     echo "hubContainer - przed uruchomieniem"
                     hubContainer.run( dockerUtils )
-                    //runContainer( HUB_CONTAINER_NAME, HUB_IMAGE_NAME )
-                    runContainer( CHROME_CONTAINER_NAME, CHROME_IMAGE_NAME )
+                    def chromeContainer = new ContainerBuilder()
+                        .withName( CHROME_CONTAINER_NAME )
+                        .withImageName( CHROME_IMAGE_NAME )
+                        .build()
+                    echo "chromeContainer - przed uruchomieniem"
+                    chromeContainer.run( dockerUtils )
+                    // runContainer( CHROME_CONTAINER_NAME, CHROME_IMAGE_NAME )
                 }
             }
         }
