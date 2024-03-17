@@ -117,6 +117,8 @@ class ContainerBuilder {
     }
 }
 
+def jenkinsUtils
+
 class Container {
     String name
     String imageName
@@ -184,8 +186,6 @@ class Container {
         -p 4443:4443 \
         -p 4444:4444 \
  */
-
-def jenkinsUtils
 
 pipeline {
     agent any
