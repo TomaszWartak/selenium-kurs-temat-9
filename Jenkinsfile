@@ -124,7 +124,7 @@ class Container {
             dockerUtils.showMessage( "Container '${name}' is not running, then run it" )
             if (dockerUtils.isContainerExisting( name, dockerUtils.getExistingContainersNames() )) {
                 // dockerUtils.runScript( "docker start ${name}", false )
-                dockerUtils.runScript( getStartScriptParameters(), false )
+                dockerUtils.runScript( "docker start "+getStartScriptParameters(), false )
             } else {
                 dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
             }
