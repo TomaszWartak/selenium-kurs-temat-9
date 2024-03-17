@@ -167,7 +167,7 @@ class Container {
     }
 
     def getStartScriptParameters() {
-        startScriptParameters = " "
+        def startScriptParameters = " "
         return startScriptParameters
     }
 
@@ -178,7 +178,7 @@ class Container {
             getPortsScriptText() +
             " --name "
         jenkinsUtils.showMessage( "getRunScriptParameters 2: "+runScriptParameters )
-        return startScriptParameters
+        return runScriptParameters
     }
 
     def getPortsScriptText() {
