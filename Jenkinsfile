@@ -1,40 +1,3 @@
-/* def getRunningContainersNames() {
-    def dockerPsOutput = sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
-    echo "getRunningContainersNames: "+ dockerPsOutput
-    return dockerPsOutput
-}
-
-def isContainerRunning( containerName, runningContainersNames ) {
-    return runningContainersNames.split().contains( containerName )
-}
-
-def getExistingContainersNames() {
-    def dockerPsOutput
-    try {
-        dockerPsOutput = sh(script: 'docker ps -a --format "{{.Names}}"', returnStdout: true )
-    } catch (Exception ex) {
-        dockerPsOutput = ""
-    }
-    return dockerPsOutput
-}
-
-def isContainerExisting( containerName, existingContainersNames ) {
-    return existingContainersNames.split().contains( containerName )
-}
-
-def runContainer( containerName, imageName ) {
-    if (isContainerRunning( containerName, getRunningContainersNames() )) {
-        echo "Container '${containerName}' is already running."
-    } else {
-        echo "Container '${containerName}' is not running, then run it"
-        if (isContainerExisting( containerName, getExistingContainersNames() )) {
-            sh(script: "docker start ${containerName}")
-        } else {
-            sh(script: "docker run -d --name ${containerName} ${imageName}")
-        }
-    } 
-} */
-
 class DockerUtils {
 
     def script
@@ -134,8 +97,8 @@ class ContainerBuilder {
             imageName: imageName,
             dependsOn: dependsOn,
             sharedMemorySize: sharedMemorySize,
-            environmentParameters: environmentParameters as String[],
-            ports: ports as String[]
+            environmentParameters: environmentParameters as List<String>,
+            ports: ports as List<String>
         )
     }
 }
@@ -145,8 +108,8 @@ class Container {
     String imageName
     String dependsOn
     String sharedMemorySize
-    String[] environmentParameters
-    String[] ports
+    List<String> environmentParameters
+    List<String> ports
 
     Container(Map params) {
         params.each { key, value ->
@@ -166,6 +129,10 @@ class Container {
             }
         }
     }
+
+    def buildScriptText(
+
+    )
 }
 /*
         --shm-size=2gb \
@@ -199,6 +166,9 @@ pipeline {
                     def hubContainer = new ContainerBuilder()
                         .withName( HUB_CONTAINER_NAME )
                         .withImageName( HUB_IMAGE_NAME )
+                        .withPort( "4442:4442" )
+                        .withPort( "4443:4443" )
+                        .withPort( "4444:4444" )
                         .build()
                     echo "hubContainer - przed uruchomieniem"
                     hubContainer.run( dockerUtils )
