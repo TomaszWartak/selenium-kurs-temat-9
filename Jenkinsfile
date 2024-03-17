@@ -196,7 +196,7 @@ pipeline {
             steps {
                 script {
                     echo "DockerUtlis - przed utworzeniem"
-                    def dockerUtils = new DockerUtils( /* binding */ this )
+                    def dockerUtils = new DockerUtils( /* binding */ this, currentBuild )
                     dockerUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
                     echo "hubContainer - przed utworzeniem"
                     def hubContainer = new ContainerBuilder()
