@@ -35,6 +35,7 @@ class DockerUtils {
     }
 
     def runContainer( containerName, imageName ) {
+        showMessage( "DockerUtils.runContainer()" )
         if (isContainerRunning( containerName, getRunningContainersNames() )) {
             showMessage( "Container '${containerName}' is already running." )
         } else {
@@ -118,6 +119,7 @@ class Container {
     }
 
     def run( dockerUtils ) {
+        showMessage( "Container.run()" )
         if (dockerUtils.isContainerRunning( name, dockerUtils.getRunningContainersNames() )) {
             dockerUtils.showMessage( "Container '${name}' is already running." )
         } else {
