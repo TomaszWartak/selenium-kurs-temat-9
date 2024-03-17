@@ -37,10 +37,10 @@ def runContainer( containerName, imageName ) {
 
 class DockerUtils {
 
-    def currentBuild
+    def script
 
-    DockerUtils( currentBuild ) {
-        this.currentBuild = currentBuild
+    DockerUtils( script ) {
+        this.script = script
 //         echo( "konstruktor DockerUtils" )
     }
 
@@ -49,7 +49,7 @@ class DockerUtils {
     }
 
     def getRunningContainersNames() {
-        //def dockerPsOutput = currentBuild.sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
+        //def dockerPsOutput = script.sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
         def dockerPsOutput = runScript( 'docker ps --format "{{.Names}}"', true).trim()
         echo ( "getRunningContainersNames: "+ dockerPsOutput )
         return dockerPsOutput
@@ -62,7 +62,7 @@ class DockerUtils {
     def getExistingContainersNames() {
         def dockerPsOutput
         try {
-            // dockerPsOutput = currentBuild.sh(script: 'docker ps -a --format "{{.Names}}"', returnStdout: true )
+            // dockerPsOutput = script.sh(script: 'docker ps -a --format "{{.Names}}"', returnStdout: true )
             dockerPsOutput = runScript('docker ps -a --format "{{.Names}}"', true )
         } catch (Exception ex) {
             dockerPsOutput = ""
@@ -89,7 +89,7 @@ class DockerUtils {
 
     def runScript( script, returnStdout ) {
         echo( script )
-        currentBuild.sh( script: script, returnStdout: returnStdout )
+        script.sh( script: script, returnStdout: returnStdout )
     }
 }
 
@@ -200,7 +200,7 @@ pipeline {
             steps {
                 script {
                     echo "DockerUtlis - przed"
-                    def dockerUtils = new DockerUtils( /* binding */ currentBuild )
+                    def dockerUtils = new DockerUtils( /* binding */ script )
                     echo "DockerUtlis - po"
                     echo "hubContainer - przed"
                     def hubContainer = new ContainerBuilder()
