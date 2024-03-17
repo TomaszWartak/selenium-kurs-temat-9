@@ -141,7 +141,7 @@ class Container {
         return startScriptParameters
     }
 
-    def getPortsScriptText() {}
+    def getPortsScriptText() {
         def portsScriptText = ""
         ports.each { port ->
             portsScriptText = portsScriptText + " -p $port"
