@@ -48,24 +48,6 @@ class DockerUtils {
         return existingContainersNames.split().contains( containerName )
     }
 
-/*     def runContainer2( containerName, imageName ) {
-        jenkinsUtils.showMessage( "DockerUtils.runContainer()" )
-        if (isContainerRunning( containerName, getRunningContainersNames() )) {
-            jenkinsUtils.showMessage( "Container '${containerName}' is already running." )
-        } else {
-            jenkinsUtils.showMessage( "Container '${containerName}' is not running, then run it" )
-            if (isContainerExisting( containerName, getExistingContainersNames() )) {
-                jenkinsUtils.runScript( "docker start ${containerName}", false )
-            } else {
-                jenkinsUtils.runScript( "docker run -d --name ${containerName} ${imageName}", false )
-            }
-        }
-    } */
-/*
-    def runScript( scriptText, returnStdout ) {
-        jenkinsUtils.showMessage( scriptText )
-        script.sh( script: scriptText, returnStdout: returnStdout )
-    } */
 }
 
 class ContainerBuilder {
@@ -222,19 +204,14 @@ class Container {
     }
 
 }
-/*
-        --shm-size=2gb \
-        --depends-on selenium-hub \
-        -e SE_EVENT_BUS_HOST=selenium-hub \
-        -e SE_EVENT_BUS_PUBLISH_PORT=4442 \
-        -e SE_EVENT_BUS_SUBSCRIBE_PORT=4443 \
-        -p 4442:4442 \
-        -p 4443:4443 \
-        -p 4444:4444 \
- */
 
 pipeline {
     agent any
+
+    tools {
+        maven "Maven" // nazwa zdefiniowana w konfiguracji Jenkins
+        // 'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'Docker'
+    }
 
     environment {
         HUB_IMAGE_NAME = 'selenium/hub:latest'
@@ -247,6 +224,11 @@ pipeline {
     }
 
     stages {
+        stage('Build test code') {
+            steps {
+                sh 'mvn clean install -DskipTests' // Budowanie testów
+            }
+        }
         stage('Running containers') {
             steps {
                 script {
@@ -254,7 +236,7 @@ pipeline {
                     echo "DockerUtlis - przed utworzeniem"
                     def dockerUtils = new DockerUtils( jenkinsUtils /* binding */ /* this, binding */ )
 
-                    echo "chromeContainer - przed uruchomieniem"
+                    echo "chromeContainer - przed utworzeniem obiektu"
                     def chromeContainer = new ContainerBuilder()
                         .withSharedMemorySize( "2gb" )
                         .withDependsOn( HUB_CONTAINER_NAME )
@@ -268,27 +250,25 @@ pipeline {
                     chromeContainer.setJenkinsUtils( jenkinsUtils )
                     chromeContainer.run( dockerUtils )
 
-                    echo "hubContainer - przed utworzeniem"
+                    echo "hubContainer - przed utworzeniem obiektu"
                     def hubContainer = new ContainerBuilder()
                         .withName( HUB_CONTAINER_NAME )
                         .withImageName( HUB_IMAGE_NAME )
-                        .withPort( "4442:4442" )
-                        .withPort( "4443:4443" )
-                        .withPort( "4444:4444" )
+                        .withPort( HUB_PORT_1 )
+                        .withPort( HUB_PORT_2 )
+                        .withPort( HUB_PORT_3 )
                         .build()
                     hubContainer.setJenkinsUtils( jenkinsUtils )
                     echo "hubContainer - przed uruchomieniem"
                     hubContainer.run( dockerUtils )
-                   /*  echo "chromeContainer - przed uruchomieniem"
-                    def chromeContainer = new ContainerBuilder()
-                        .withName( CHROME_CONTAINER_NAME )
-                        .withImageName( CHROME_IMAGE_NAME )
-                        .build()
-                    echo "chromeContainer - przed uruchomieniem"
-                    chromeContainer.run( dockerUtils ) */
-                    // runContainer( CHROME_CONTAINER_NAME, CHROME_IMAGE_NAME )
                 }
             }
+        }
+        stage('Execute test') {
+            steps {
+                sh 'mvn test' // Uruchomienie testów
+                sh 'docker compose down' // Wyłączenie Docker Selenium, wyłączenie kontenerów
+              }
         }
 
     }
