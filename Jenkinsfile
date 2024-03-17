@@ -160,6 +160,7 @@ class Container {
             + getPortsScriptText()
         // startScriptParameters = startScriptParameters + getPortsScriptText()
         // startScriptParameters = startScriptParameters + getEnvironmentParametersScriptText
+        jenkinsUtils.showMessage( startScriptParameters )
         return startScriptParameters
     }
 
