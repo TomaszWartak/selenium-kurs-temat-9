@@ -167,7 +167,7 @@ class Container {
     def getPortsScriptText() {
         def portsScriptText = ""
         ports.each { port ->
-            portsScriptText = portsScriptText + " -p $port"
+            portsScriptText = portsScriptText + " -p ${port}"
         }
         return portsScriptText
     }
