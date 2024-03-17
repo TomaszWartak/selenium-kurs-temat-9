@@ -117,8 +117,6 @@ class ContainerBuilder {
     }
 }
 
-def jenkinsUtils
-
 class Container {
     String name
     String imageName
@@ -126,11 +124,16 @@ class Container {
     String sharedMemorySize
     List<String> environmentParameters
     List<String> ports
+    def jenkinsUtils
 
     Container(Map params) {
         params.each { key, value ->
             this."$key" = value
         }
+    }
+
+    def setJenkinsUtils( jenkinsUtils ) {
+        this.jenkinsUtils = jenkinsUtils
     }
 
     def run( dockerUtils ) {
