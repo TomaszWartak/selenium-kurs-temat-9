@@ -124,7 +124,7 @@ class Container {
     String sharedMemorySize
     List<String> environmentParameters
     List<String> ports
-    def jenkinsUtils
+//     def jenkinsUtils
 
     Container(Map params) {
         params.each { key, value ->
@@ -132,11 +132,11 @@ class Container {
         }
     }
 
-    def setJenkinsUtils( jenkinsUtils ) {
+    /* def setJenkinsUtils( jenkinsUtils ) {
         this.jenkinsUtils = jenkinsUtils
-    }
+    } */
 
-    def run( dockerUtils ) {
+    def run( dockerUtils, jenkinsUtils ) {
         jenkinsUtils.showMessage( "Container.run()" )
         if (dockerUtils.isContainerRunning( name, dockerUtils.getRunningContainersNames() )) {
             jenkinsUtils.showMessage( "Container '${name}' is already running." )
@@ -204,7 +204,7 @@ pipeline {
         stage('Running containers') {
             steps {
                 script {
-                    jenkinsUtils = new JenkinsUtils( this )
+                    def jenkinsUtils = new JenkinsUtils( this )
                     echo "DockerUtlis - przed utworzeniem"
                     def dockerUtils = new DockerUtils( jenkinsUtils /* binding */ /* this, binding */ )
                     jenkinsUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
@@ -217,7 +217,7 @@ pipeline {
                         .withPort( "4444:4444" )
                         .build()
                     echo "hubContainer - przed uruchomieniem"
-                    hubContainer.run( dockerUtils )
+                    hubContainer.run( dockerUtils, jenkinsUtils )
                    /*  echo "chromeContainer - przed uruchomieniem"
                     def chromeContainer = new ContainerBuilder()
                         .withName( CHROME_CONTAINER_NAME )
