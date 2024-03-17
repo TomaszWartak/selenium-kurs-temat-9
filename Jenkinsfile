@@ -34,7 +34,7 @@ class DockerUtils {
         return existingContainersNames.split().contains( containerName )
     }
 
-    def runContainer( containerName, imageName ) {
+    def runContainer2( containerName, imageName ) {
         showMessage( "DockerUtils.runContainer()" )
         if (isContainerRunning( containerName, getRunningContainersNames() )) {
             showMessage( "Container '${containerName}' is already running." )
@@ -189,6 +189,7 @@ pipeline {
                 script {
                     echo "DockerUtlis - przed utworzeniem"
                     def dockerUtils = new DockerUtils( /* binding */ this )
+                    dockerUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
                     echo "hubContainer - przed utworzeniem"
                     def hubContainer = new ContainerBuilder()
                         .withName( HUB_CONTAINER_NAME )
