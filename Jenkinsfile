@@ -197,13 +197,13 @@ pipeline {
                         .build()
                     echo "hubContainer - przed uruchomieniem"
                     hubContainer.run( dockerUtils )
-                    echo "chromeContainer - przed uruchomieniem"
+                   /*  echo "chromeContainer - przed uruchomieniem"
                     def chromeContainer = new ContainerBuilder()
                         .withName( CHROME_CONTAINER_NAME )
                         .withImageName( CHROME_IMAGE_NAME )
                         .build()
                     echo "chromeContainer - przed uruchomieniem"
-                    chromeContainer.run( dockerUtils )
+                    chromeContainer.run( dockerUtils ) */
                     // runContainer( CHROME_CONTAINER_NAME, CHROME_IMAGE_NAME )
                 }
             }
