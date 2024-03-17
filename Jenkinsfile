@@ -1,19 +1,17 @@
 class JenkinsUtils {
-    def script
-    def binding
+    def context
 
-    JenkinsUtils( script, binding ) {
-        this.script = script
-        this.binding = binding
+    JenkinsUtils( context ) {
+        this.context = context
     }
 
     def showMessage( message ) {
-        binding.echo( message )
+        context.echo( message )
     }
 
     def runScript( scriptText, returnStdout ) {
         showMessage( scriptText )
-        script.sh( script: scriptText, returnStdout: returnStdout )
+        context.sh( script: scriptText, returnStdout: returnStdout )
     }
 }
 
@@ -202,7 +200,7 @@ pipeline {
         stage('Running containers') {
             steps {
                 script {
-                    def jenkinsUtils = new JenkinsUtils( this, script /* binding */ )
+                    def jenkinsUtils = new JenkinsUtils( this )
                     echo "DockerUtlis - przed utworzeniem"
                     def dockerUtils = new DockerUtils( jenkinsUtils /* binding */ /* this, binding */ )
                     jenkinsUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
