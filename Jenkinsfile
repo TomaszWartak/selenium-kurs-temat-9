@@ -174,10 +174,10 @@ class Container {
     def getRunScriptParameters() {
         def runScriptParameters =
             " -d" +
-            getEnvironmentParametersScriptText +
+            getEnvironmentParametersScriptText() +
             getPortsScriptText() +
             " --name "
-        jenkinsUtils.showMessage( "getRunScriptParameters 2: "+runScriptParameters )
+        jenkinsUtils.showMessage( "getRunScriptParameters 2: " + runScriptParameters )
         return runScriptParameters
     }
 
@@ -186,9 +186,7 @@ class Container {
         jenkinsUtils.showMessage( ports.size().toString() )
         def portsScriptText = ""
         ports.each { port ->
-            //jenkinsUtils.showMessage( port )
             portsScriptText = portsScriptText + " -p $port"
-            //portsScriptText += " -p $port"
         }
         jenkinsUtils.showMessage( portsScriptText )
         return portsScriptText
