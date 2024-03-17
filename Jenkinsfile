@@ -201,7 +201,7 @@ pipeline {
                     def jenkinsUtils = new JenkinsUtils( this, binding )
                     echo "DockerUtlis - przed utworzeniem"
                     def dockerUtils = new DockerUtils( jenkinsUtils /* binding */ /* this, binding */ )
-                    dockerUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
+                    jenkinsUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
                     echo "hubContainer - przed utworzeniem"
                     def hubContainer = new ContainerBuilder()
                         .withName( HUB_CONTAINER_NAME )
