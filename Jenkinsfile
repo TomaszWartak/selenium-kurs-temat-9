@@ -40,6 +40,7 @@ class DockerUtils {
         } catch (Exception ex) {
             dockerPsOutput = ""
         }
+        jenkinsUtils.showMessage( "getExistingContainersNames: "+ dockerPsOutput )
         return dockerPsOutput
     }
 
@@ -47,7 +48,7 @@ class DockerUtils {
         return existingContainersNames.split().contains( containerName )
     }
 
-    def runContainer2( containerName, imageName ) {
+/*     def runContainer2( containerName, imageName ) {
         jenkinsUtils.showMessage( "DockerUtils.runContainer()" )
         if (isContainerRunning( containerName, getRunningContainersNames() )) {
             jenkinsUtils.showMessage( "Container '${containerName}' is already running." )
@@ -59,7 +60,7 @@ class DockerUtils {
                 jenkinsUtils.runScript( "docker run -d --name ${containerName} ${imageName}", false )
             }
         }
-    }
+    } */
 /*
     def runScript( scriptText, returnStdout ) {
         jenkinsUtils.showMessage( scriptText )
