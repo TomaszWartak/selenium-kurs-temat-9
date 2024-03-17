@@ -169,10 +169,11 @@ class Container {
         jenkinsUtils.showMessage( ports.size().toString() )
         def portsScriptText = ""
         ports.each { port ->
-            jenkinsUtils.showMessage( port )
-            // portsScriptText = portsScriptText + " -p "+port
+            //jenkinsUtils.showMessage( port )
+            portsScriptText = portsScriptText + " -p $port"
             //portsScriptText += " -p $port"
         }
+        jenkinsUtils.showMessage( portsScriptText )
         return portsScriptText
     }
 
