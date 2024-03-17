@@ -156,9 +156,9 @@ class Container {
 
     def run( dockerUtils ) {
         if (dockerUtils.isContainerRunning( name, dockerUtils.getRunningContainersNames() )) {
-            dockerUtils.echo( "Container '${name}' is already running." )
+            dockerUtils.showMessage( "Container '${name}' is already running." )
         } else {
-            dockerUtils.echo( "Container '${name}' is not running, then run it" )
+            dockerUtils.showMessage( "Container '${name}' is not running, then run it" )
             if (dockerUtils.isContainerExisting( name, dockerUtils.getExistingContainersNames() )) {
                 dockerUtils.runScript( "docker start ${name}", false )
             } else {
