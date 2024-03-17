@@ -171,6 +171,7 @@ class Container {
             }
         }
     }
+
 }
 /*
         --shm-size=2gb \
@@ -207,8 +208,9 @@ pipeline {
                         .withName( HUB_CONTAINER_NAME )
                         .withImageName( HUB_IMAGE_NAME )
                         .build()
-                    hubContainer.run( dockerUtils )
+                    //hubContainer.run( dockerUtils )
                     //runContainer( HUB_CONTAINER_NAME, HUB_IMAGE_NAME )
+                    runContainer( )
                     runContainer( CHROME_CONTAINER_NAME, CHROME_IMAGE_NAME )
                 }
             }
