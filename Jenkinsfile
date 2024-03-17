@@ -7,7 +7,7 @@ class JenkinsUtils {
         this.currentBuild = currentBuild
     }
 
-    static def showMessage( message ) {
+    def showMessage( message ) {
         binding.echo( message )
     }
 
@@ -15,12 +15,15 @@ class JenkinsUtils {
 
 class DockerUtils {
 
-    /* DockerUtils( jenkinsUtils ) {
+    def jenkinsUtils
+
+    DockerUtils( jenkinsUtils ) {
+        this.jenkinsUtils = jenkinsUtils
     }
- */
+
     def getRunningContainersNames() {
         def dockerPsOutput = runScript( 'docker ps --format "{{.Names}}"', true).trim()
-        JenkinsUtils.showMessage( "getRunningContainersNames: "+ dockerPsOutput )
+        jenkinsUtils.showMessage( "getRunningContainersNames: "+ dockerPsOutput )
         return dockerPsOutput
     }
 
@@ -43,11 +46,11 @@ class DockerUtils {
     }
 
     def runContainer2( containerName, imageName ) {
-        JenkinsUtils.showMessage( "DockerUtils.runContainer()" )
+        jenkinsUtils.showMessage( "DockerUtils.runContainer()" )
         if (isContainerRunning( containerName, getRunningContainersNames() )) {
-            JenkinsUtils.showMessage( "Container '${containerName}' is already running." )
+            jenkinsUtils.showMessage( "Container '${containerName}' is already running." )
         } else {
-            JenkinsUtils.showMessage( "Container '${containerName}' is not running, then run it" )
+            jenkinsUtils.showMessage( "Container '${containerName}' is not running, then run it" )
             if (isContainerExisting( containerName, getExistingContainersNames() )) {
                 runScript( "docker start ${containerName}", false )
             } else {
@@ -57,7 +60,7 @@ class DockerUtils {
     }
 
     def runScript( scriptText, returnStdout ) {
-        JenkinsUtils.showMessage( scriptText )
+        jenkinsUtils.showMessage( scriptText )
         script.sh( script: scriptText, returnStdout: returnStdout )
     }
 }
@@ -127,11 +130,11 @@ class Container {
     }
 
     def run( dockerUtils ) {
-        JenkinsUtils.showMessage( "Container.run()" )
+        jenkinsUtils.showMessage( "Container.run()" )
         if (dockerUtils.isContainerRunning( name, dockerUtils.getRunningContainersNames() )) {
-            JenkinsUtils.showMessage( "Container '${name}' is already running." )
+            jenkinsUtils.showMessage( "Container '${name}' is already running." )
         } else {
-            JenkinsUtils.showMessage( "Container '${name}' is not running, then run it" )
+            jenkinsUtils.showMessage( "Container '${name}' is not running, then run it" )
             if (dockerUtils.isContainerExisting( name, dockerUtils.getExistingContainersNames() )) {
                 // dockerUtils.runScript( "docker start ${name}", false )
                 dockerUtils.runScript( "docker start "+getStartScriptParameters(), false )
@@ -195,8 +198,9 @@ pipeline {
         stage('Running containers') {
             steps {
                 script {
+                    def jenkinsUtils = new JenkinsUtils( this, binding )
                     echo "DockerUtlis - przed utworzeniem"
-                    def dockerUtils = new DockerUtils( /* binding */ this, binding )
+                    def dockerUtils = new DockerUtils( jenkinsUtils /* binding */ /* this, binding */ )
                     dockerUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
                     echo "hubContainer - przed utworzeniem"
                     def hubContainer = new ContainerBuilder()
