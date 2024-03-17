@@ -1,14 +1,14 @@
 class JenkinsUtils {
     def script
-    def currentBuild
+    def binding
 
-    JenkinsUtils( script, currentBuild ) {
+    JenkinsUtils( script, binding ) {
         this.script = script
         this.currentBuild = currentBuild
     }
 
     static def showMessage( message ) {
-        currentBuild.echo( message )
+        binding.echo( message )
     }
 
 }
@@ -196,7 +196,7 @@ pipeline {
             steps {
                 script {
                     echo "DockerUtlis - przed utworzeniem"
-                    def dockerUtils = new DockerUtils( /* binding */ this, currentBuild )
+                    def dockerUtils = new DockerUtils( /* binding */ this, binding )
                     dockerUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
                     echo "hubContainer - przed utworzeniem"
                     def hubContainer = new ContainerBuilder()
