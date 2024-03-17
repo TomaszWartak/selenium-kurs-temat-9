@@ -185,6 +185,7 @@ class Container {
         -p 4444:4444 \
  */
 
+def jenkinsUtils
 
 pipeline {
     agent any
@@ -200,7 +201,7 @@ pipeline {
         stage('Running containers') {
             steps {
                 script {
-                    def jenkinsUtils = new JenkinsUtils( this )
+                    jenkinsUtils = new JenkinsUtils( this )
                     echo "DockerUtlis - przed utworzeniem"
                     def dockerUtils = new DockerUtils( jenkinsUtils /* binding */ /* this, binding */ )
                     jenkinsUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
