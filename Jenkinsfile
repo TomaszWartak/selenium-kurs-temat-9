@@ -202,11 +202,12 @@ pipeline {
                     echo "DockerUtlis - przed"
                     def dockerUtils = new DockerUtils( /* binding */ this )
                     echo "DockerUtlis - po"
-                    echo "hubContainer - przed"
+                    echo "hubContainer - przed utworzeniem"
                     def hubContainer = new ContainerBuilder()
                         .withName( HUB_CONTAINER_NAME )
                         .withImageName( HUB_IMAGE_NAME )
                         .build()
+                    echo "hubContainer - przed uruchomieniem"
                     hubContainer.run( dockerUtils )
                     //runContainer( HUB_CONTAINER_NAME, HUB_IMAGE_NAME )
                     runContainer( CHROME_CONTAINER_NAME, CHROME_IMAGE_NAME )
