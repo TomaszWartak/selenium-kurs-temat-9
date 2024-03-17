@@ -43,13 +43,13 @@ class DockerUtils {
         this.script = script
     }
 
-    def echo( message ) {
+    def showMessage( message ) {
         script.echo( message )
     }
 
     def getRunningContainersNames() {
         def dockerPsOutput = runScript( 'docker ps --format "{{.Names}}"', true).trim()
-        echo( "getRunningContainersNames: "+ dockerPsOutput )
+        showMessage( "getRunningContainersNames: "+ dockerPsOutput )
         return dockerPsOutput
     }
 
@@ -73,9 +73,9 @@ class DockerUtils {
 
     def runContainer( containerName, imageName ) {
         if (isContainerRunning( containerName, getRunningContainersNames() )) {
-            echo( "Container '${containerName}' is already running." )
+            showMessage( "Container '${containerName}' is already running." )
         } else {
-            echo( "Container '${containerName}' is not running, then run it" )
+            showMessage( "Container '${containerName}' is not running, then run it" )
             if (isContainerExisting( containerName, getExistingContainersNames() )) {
                 runScript( "docker start ${containerName}", false )
             } else {
@@ -189,7 +189,6 @@ pipeline {
         CHROME_CONTAINER_NAME = 'chrome'
     }
 
-    
     stages {
         stage('Running containers') {
             steps {
@@ -203,6 +202,7 @@ pipeline {
                         .build()
                     echo "hubContainer - przed uruchomieniem"
                     hubContainer.run( dockerUtils )
+                    echo "chromeContainer - przed uruchomieniem"
                     def chromeContainer = new ContainerBuilder()
                         .withName( CHROME_CONTAINER_NAME )
                         .withImageName( CHROME_IMAGE_NAME )
