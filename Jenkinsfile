@@ -123,16 +123,40 @@ class Container {
         } else {
             dockerUtils.showMessage( "Container '${name}' is not running, then run it" )
             if (dockerUtils.isContainerExisting( name, dockerUtils.getExistingContainersNames() )) {
-                dockerUtils.runScript( "docker start ${name}", false )
+                // dockerUtils.runScript( "docker start ${name}", false )
+                dockerUtils.runScript( getStartScriptParameters, false )
             } else {
                 dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
             }
         }
     }
 
-    def buildScriptText(
+    def getStartScriptParameters() {
+        def startScriptParameters = ""
+        startScriptParameters =
+            "${name}" // +
 
-    )
+        // startScriptParameters = startScriptParameters + getPortsScriptText()
+        // startScriptParameters = startScriptParameters + getEnvironmentParametersScriptText
+        return startScriptParameters
+    }
+
+    def getPortsScriptText() {}
+        def portsScriptText = ""
+        ports.each { port ->
+            portsScriptText = portsScriptText + " -p $port"
+        }
+        return portsScriptText
+    }
+
+    def getEnvironmentParametersScriptText() {
+        def environmentParametersScriptText = ""
+        environmentParameters.each { parameter ->
+            environmentParametersScriptText = environmentParametersScriptText + " -p $parameter"
+        }
+        return environmentParametersScriptText
+    }
+
 }
 /*
         --shm-size=2gb \
