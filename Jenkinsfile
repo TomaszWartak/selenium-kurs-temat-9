@@ -85,7 +85,7 @@ class DockerUtils {
     }
 
     def runScript( scriptText, returnStdout ) {
-        echo( script )
+        showMessage( scriptText )
         script.sh( script: scriptText, returnStdout: returnStdout )
     }
 }
