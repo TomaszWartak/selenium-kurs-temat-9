@@ -156,7 +156,7 @@ class Container {
     def getStartScriptParameters() {
         def startScriptParameters = ""
         startScriptParameters =
-            "${name}"+
+            "$name"+
             + getPortsScriptText()
         // startScriptParameters = startScriptParameters + getPortsScriptText()
         // startScriptParameters = startScriptParameters + getEnvironmentParametersScriptText
