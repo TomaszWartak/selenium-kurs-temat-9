@@ -145,15 +145,21 @@ class Container {
             jenkinsUtils.showMessage( "Container '${name}' is not running, then run it" )
             if (dockerUtils.isContainerExisting( name, dockerUtils.getExistingContainersNames() )) {
                 // dockerUtils.runScript( "docker start ${name}", false )
-                jenkinsUtils.runScript( "docker start "+getStartScriptParameters(), false )
+                jenkinsUtils.runScript(
+                    "docker start" +
+                    getStartScriptParameters() +
+                    name,
+                    false
+                )
             } else {
                 // dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
                 // jenkinsUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
                 jenkinsUtils.runScript(
                     "docker run" +
                     getRunScriptParameters() +
-                    " ${name}" +
-                    " ${imageName}",
+                    name +
+                    " " +
+                    imageName,
                     false
                 )
             }
@@ -161,14 +167,7 @@ class Container {
     }
 
     def getStartScriptParameters() {
-        def startScriptParameters = getPortsScriptText()
-        jenkinsUtils.showMessage( "getStartScriptParameters 1: "+startScriptParameters )
-        startScriptParameters =
-            name +
-            getPortsScriptText()
-        // startScriptParameters = startScriptParameters + getPortsScriptText()
-        // startScriptParameters = startScriptParameters + getEnvironmentParametersScriptText
-        jenkinsUtils.showMessage( "getStartScriptParameters 2: "+startScriptParameters )
+        startScriptParameters = " "
         return startScriptParameters
     }
 
@@ -177,7 +176,7 @@ class Container {
             " -d" +
             getEnvironmentParametersScriptText +
             getPortsScriptText() +
-            " --name"
+            " --name "
         jenkinsUtils.showMessage( "getRunScriptParameters 2: "+runScriptParameters )
         return startScriptParameters
     }
