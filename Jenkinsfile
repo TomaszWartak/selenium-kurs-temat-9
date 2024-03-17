@@ -198,7 +198,7 @@ pipeline {
         stage('Running containers') {
             steps {
                 script {
-                    def jenkinsUtils = new JenkinsUtils( this, binding )
+                    def jenkinsUtils = new JenkinsUtils( this, script /* binding */ )
                     echo "DockerUtlis - przed utworzeniem"
                     def dockerUtils = new DockerUtils( jenkinsUtils /* binding */ /* this, binding */ )
                     jenkinsUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
