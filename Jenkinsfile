@@ -148,7 +148,14 @@ class Container {
                 jenkinsUtils.runScript( "docker start "+getStartScriptParameters(), false )
             } else {
                 // dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
-                jenkinsUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
+                // jenkinsUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
+                jenkinsUtils.runScript(
+                    "docker run" +
+                    getRunScriptParameters() +
+                    " ${name}" +
+                    " ${imageName}",
+                    false
+                )
             }
         }
     }
@@ -156,10 +163,22 @@ class Container {
     def getStartScriptParameters() {
         def startScriptParameters = getPortsScriptText()
         jenkinsUtils.showMessage( "getStartScriptParameters 1: "+startScriptParameters )
-        startScriptParameters = name + getPortsScriptText()
+        startScriptParameters =
+            name +
+            getPortsScriptText()
         // startScriptParameters = startScriptParameters + getPortsScriptText()
         // startScriptParameters = startScriptParameters + getEnvironmentParametersScriptText
         jenkinsUtils.showMessage( "getStartScriptParameters 2: "+startScriptParameters )
+        return startScriptParameters
+    }
+
+    def getRunScriptParameters() {
+        def runScriptParameters =
+            " -d" +
+            getEnvironmentParametersScriptText +
+            getPortsScriptText() +
+            " --name"
+        jenkinsUtils.showMessage( "getRunScriptParameters 2: "+runScriptParameters )
         return startScriptParameters
     }
 
