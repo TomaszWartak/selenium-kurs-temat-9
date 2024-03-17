@@ -1,4 +1,4 @@
-def getRunningContainersNames() {
+/* def getRunningContainersNames() {
     def dockerPsOutput = sh(script: 'docker ps --format "{{.Names}}"', returnStdout: true).trim()
     echo "getRunningContainersNames: "+ dockerPsOutput
     return dockerPsOutput
@@ -33,7 +33,7 @@ def runContainer( containerName, imageName ) {
             sh(script: "docker run -d --name ${containerName} ${imageName}")
         }
     } 
-}
+} */
 
 class DockerUtils {
 
