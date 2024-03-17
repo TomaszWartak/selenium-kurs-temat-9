@@ -166,7 +166,7 @@ class Container {
 
     def getPortsScriptText() {
         jenkinsUtils.showMessage( "getPortsScriptText()" )
-        jenkinsUtils.showMessage( ports )
+        jenkinsUtils.showMessage( ports.size() )
         def portsScriptText = ""
         ports.each { port ->
             portsScriptText = portsScriptText + " -p $port"
