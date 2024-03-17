@@ -177,27 +177,48 @@ class Container {
             getEnvironmentParametersScriptText() +
             getPortsScriptText() +
             " --name "
-        jenkinsUtils.showMessage( "getRunScriptParameters 2: " + runScriptParameters )
+        // jenkinsUtils.showMessage( "getRunScriptParameters 2: " + runScriptParameters )
         return runScriptParameters
     }
 
     def getPortsScriptText() {
-        jenkinsUtils.showMessage( "getPortsScriptText()" )
-        jenkinsUtils.showMessage( ports.size().toString() )
         def portsScriptText = ""
-        ports.each { port ->
-            portsScriptText = portsScriptText + " -p $port"
+        if ((ports!=null) && (ports.size()>0)) {
+            ports.each { port ->
+                portsScriptText = portsScriptText + " -p $port"
+            }
         }
-        jenkinsUtils.showMessage( portsScriptText )
+        // jenkinsUtils.showMessage( "getPortsScriptText: "+portsScriptText )
         return portsScriptText
     }
 
     def getEnvironmentParametersScriptText() {
         def environmentParametersScriptText = ""
-        environmentParameters.each { parameter ->
-            environmentParametersScriptText = environmentParametersScriptText + " -p $parameter"
+        if ((environmentParameters!=null) && (environmentParameters.size()>0)) {
+            environmentParameters.each { parameter ->
+                environmentParametersScriptText = environmentParametersScriptText + " -p $parameter"
+            }
         }
+        // jenkinsUtils.showMessage( "getEnvironmentParametersScriptText: "+portsScriptText )
         return environmentParametersScriptText
+    }
+
+    def getDependsOnScriptText() {
+        def dependsOnScriptText = ""
+        if (dependsOn!=null) {
+            dependsOnScriptText = "--depends-on "+dependsOn
+        }
+        // jenkinsUtils.showMessage( "getDependsOnScriptText: "+portsScriptText )
+        return dependsOnScriptText
+    }
+
+    def getSharedMemorySizeScriptText() {
+        def sharedMemorySizeScriptText = ""
+        if (sharedMemorySize!=null) {
+            sharedMemorySizeScriptText = "--shm-size="+sharedMemorySize
+        }
+        // jenkinsUtils.showMessage( "getSharedMemorySizeScriptText: "+portsScriptText )
+        return sharedMemorySizeScriptText
     }
 
 }
