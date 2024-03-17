@@ -196,7 +196,7 @@ class Container {
         def environmentParametersScriptText = ""
         if ((environmentParameters!=null) && (environmentParameters.size()>0)) {
             environmentParameters.each { parameter ->
-                environmentParametersScriptText = environmentParametersScriptText + " -p $parameter"
+                environmentParametersScriptText = environmentParametersScriptText + " -e $parameter"
             }
         }
         // jenkinsUtils.showMessage( "getEnvironmentParametersScriptText: "+portsScriptText )
@@ -239,6 +239,9 @@ pipeline {
     environment {
         HUB_IMAGE_NAME = 'selenium/hub:latest'
         HUB_CONTAINER_NAME = 'hub'
+        HUB_PORT_1 = "4442:4442"
+        HUB_PORT_2 = "4443:4443"
+        HUB_PORT_3 = "4444:4444"
         CHROME_IMAGE_NAME = 'selenium/node-chrome:latest'
         CHROME_CONTAINER_NAME = 'chrome'
     }
@@ -250,7 +253,21 @@ pipeline {
                     def jenkinsUtils = new JenkinsUtils( this )
                     echo "DockerUtlis - przed utworzeniem"
                     def dockerUtils = new DockerUtils( jenkinsUtils /* binding */ /* this, binding */ )
-                    jenkinsUtils.showMessage( "ZZZZZZZZZZZZZZZZZZZZZZ")
+
+                    echo "chromeContainer - przed uruchomieniem"
+                    def chromeContainer = new ContainerBuilder()
+                        .withSharedMemorySize( "2gb" )
+                        .withDependsOn( HUB_CONTAINER_NAME )
+                        .withEnvironmentParameter( "SE_EVENT_BUS_HOST="+HUB_CONTAINER_NAME)
+                        .withEnvironmentParameter( "SE_EVENT_BUS_PUBLISH_PORT="+HUB_PORT_1 )
+                        .withEnvironmentParameter( "SE_EVENT_BUS_SUBSCRIBE_PORT="HUB_PORT_2 )
+                        .withName( CHROME_CONTAINER_NAME )
+                        .withImageName( CHROME_IMAGE_NAME )
+                        .build()
+                    echo "chromeContainer - przed uruchomieniem"
+                    chromeContainer.setJenkinsUtils( jenkinsUtils )
+                    chromeContainer.run( dockerUtils )
+
                     echo "hubContainer - przed utworzeniem"
                     def hubContainer = new ContainerBuilder()
                         .withName( HUB_CONTAINER_NAME )
