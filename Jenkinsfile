@@ -11,6 +11,10 @@ class JenkinsUtils {
         binding.echo( message )
     }
 
+    def runScript( scriptText, returnStdout ) {
+        showMessage( scriptText )
+        script.sh( script: scriptText, returnStdout: returnStdout )
+    }
 }
 
 class DockerUtils {
@@ -22,7 +26,7 @@ class DockerUtils {
     }
 
     def getRunningContainersNames() {
-        def dockerPsOutput = runScript( 'docker ps --format "{{.Names}}"', true).trim()
+        def dockerPsOutput = jenkinsUtils.runScript( 'docker ps --format "{{.Names}}"', true).trim()
         jenkinsUtils.showMessage( "getRunningContainersNames: "+ dockerPsOutput )
         return dockerPsOutput
     }
@@ -34,7 +38,7 @@ class DockerUtils {
     def getExistingContainersNames() {
         def dockerPsOutput
         try {
-            dockerPsOutput = runScript('docker ps -a --format "{{.Names}}"', true )
+            dockerPsOutput = jenkinsUtils.runScript('docker ps -a --format "{{.Names}}"', true )
         } catch (Exception ex) {
             dockerPsOutput = ""
         }
@@ -52,17 +56,17 @@ class DockerUtils {
         } else {
             jenkinsUtils.showMessage( "Container '${containerName}' is not running, then run it" )
             if (isContainerExisting( containerName, getExistingContainersNames() )) {
-                runScript( "docker start ${containerName}", false )
+                jenkinsUtils.runScript( "docker start ${containerName}", false )
             } else {
-                runScript( "docker run -d --name ${containerName} ${imageName}", false )
+                jenkinsUtils.runScript( "docker run -d --name ${containerName} ${imageName}", false )
             }
         }
     }
-
+/*
     def runScript( scriptText, returnStdout ) {
         jenkinsUtils.showMessage( scriptText )
         script.sh( script: scriptText, returnStdout: returnStdout )
-    }
+    } */
 }
 
 class ContainerBuilder {
@@ -137,10 +141,10 @@ class Container {
             jenkinsUtils.showMessage( "Container '${name}' is not running, then run it" )
             if (dockerUtils.isContainerExisting( name, dockerUtils.getExistingContainersNames() )) {
                 // dockerUtils.runScript( "docker start ${name}", false )
-                dockerUtils.runScript( "docker start "+getStartScriptParameters(), false )
+                jenkinsUtils.runScript( "docker start "+getStartScriptParameters(), false )
             } else {
                 // dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
-                dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
+                jenkinsUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
             }
         }
     }
