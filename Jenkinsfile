@@ -260,7 +260,7 @@ pipeline {
                         .withDependsOn( HUB_CONTAINER_NAME )
                         .withEnvironmentParameter( "SE_EVENT_BUS_HOST="+HUB_CONTAINER_NAME)
                         .withEnvironmentParameter( "SE_EVENT_BUS_PUBLISH_PORT="+HUB_PORT_1 )
-                        .withEnvironmentParameter( "SE_EVENT_BUS_SUBSCRIBE_PORT="HUB_PORT_2 )
+                        .withEnvironmentParameter( "SE_EVENT_BUS_SUBSCRIBE_PORT="+HUB_PORT_2 )
                         .withName( CHROME_CONTAINER_NAME )
                         .withImageName( CHROME_IMAGE_NAME )
                         .build()
