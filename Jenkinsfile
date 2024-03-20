@@ -157,6 +157,7 @@ class Container {
     def getRunScriptParameters() {
         def runScriptParameters =
             " -d" +
+            getDependsOnScriptText() +
             getEnvironmentParametersScriptText() +
             getPortsScriptText() +
             " --name "
