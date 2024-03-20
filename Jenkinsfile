@@ -104,7 +104,7 @@ class Container {
     String name
     String imageName
     String dependsOn
-    String sharedMemorySize
+//     String sharedMemorySize
     List<String> environmentParameters
     List<String> ports
     def jenkinsUtils
@@ -188,20 +188,20 @@ class Container {
     def getDependsOnScriptText() {
         def dependsOnScriptText = ""
         if (dependsOn!=null) {
-            dependsOnScriptText = "--depends-on "+dependsOn
+            dependsOnScriptText = "--link "+dependsOn
         }
         // jenkinsUtils.showMessage( "getDependsOnScriptText: "+portsScriptText )
         return dependsOnScriptText
     }
 
-    def getSharedMemorySizeScriptText() {
+    /* def getSharedMemorySizeScriptText() {
         def sharedMemorySizeScriptText = ""
         if (sharedMemorySize!=null) {
             sharedMemorySizeScriptText = "--shm-size="+sharedMemorySize
         }
         // jenkinsUtils.showMessage( "getSharedMemorySizeScriptText: "+portsScriptText )
         return sharedMemorySizeScriptText
-    }
+    } */
 
 }
 
@@ -250,7 +250,7 @@ pipeline {
 
                     echo "chromeContainer - przed utworzeniem obiektu"
                     def chromeContainer = new ContainerBuilder()
-                        .withSharedMemorySize( "2gb" )
+                        //.withSharedMemorySize( "2gb" )
                         .withDependsOn( HUB_CONTAINER_NAME )
                         .withEnvironmentParameter( "SE_EVENT_BUS_HOST="+HUB_CONTAINER_NAME)
                         .withEnvironmentParameter( "SE_EVENT_BUS_PUBLISH_PORT="+HUB_PORT_1 )
