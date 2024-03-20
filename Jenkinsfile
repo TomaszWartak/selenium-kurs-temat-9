@@ -253,7 +253,7 @@ pipeline {
                     echo "chromeContainer - przed utworzeniem obiektu"
                     def chromeContainer = new ContainerBuilder()
                         //.withSharedMemorySize( "2gb" )
-                        .withDependsOn( "localhost"/* HUB_CONTAINER_NAME */ )
+                        .withDependsOn( HUB_CONTAINER_NAME )
                         .withEnvironmentParameter( "SE_EVENT_BUS_HOST="+HUB_CONTAINER_NAME)
                         .withEnvironmentParameter( "SE_EVENT_BUS_PUBLISH_PORT="+HUB_PORT_1 )
                         .withEnvironmentParameter( "SE_EVENT_BUS_SUBSCRIBE_PORT="+HUB_PORT_2 )
