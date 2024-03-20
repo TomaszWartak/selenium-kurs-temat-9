@@ -190,7 +190,7 @@ class Container {
     def getDependsOnScriptText() {
         def dependsOnScriptText = ""
         if (dependsOn!=null) {
-            dependsOnScriptText = "--link "+dependsOn
+            dependsOnScriptText = " --link "+dependsOn
         }
         // jenkinsUtils.showMessage( "getDependsOnScriptText: "+portsScriptText )
         return dependsOnScriptText
