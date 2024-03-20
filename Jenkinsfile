@@ -134,6 +134,7 @@ class Container {
                     false
                 )
             } else {
+                jenkinsUtils.showMessage( "Container '${name}' is not created, then create and run it" )
                 // dockerUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
                 // jenkinsUtils.runScript( "docker run -d --name ${name} ${imageName}", false )
                 jenkinsUtils.runScript(
