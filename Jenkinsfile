@@ -54,7 +54,7 @@ class ContainerBuilder {
     String name
     String imageName
     String dependsOn
-    String sharedMemorySize
+    //String sharedMemorySize
     List<String> environmentParameters = []
     List<String> ports = []
 
@@ -73,10 +73,10 @@ class ContainerBuilder {
         return this
     }
 
-    ContainerBuilder withSharedMemorySize(String sharedMemorySize) {
+    /* ContainerBuilder withSharedMemorySize(String sharedMemorySize) {
         this.sharedMemorySize = sharedMemorySize
         return this
-    }
+    } */
 
     ContainerBuilder withEnvironmentParameter(String parameter) {
         this.environmentParameters << parameter
@@ -93,7 +93,7 @@ class ContainerBuilder {
             name: name,
             imageName: imageName,
             dependsOn: dependsOn,
-            sharedMemorySize: sharedMemorySize,
+            //sharedMemorySize: sharedMemorySize,
             environmentParameters: environmentParameters as List<String>,
             ports: ports as List<String>
         )
